@@ -15,7 +15,6 @@ sb.set_style('whitegrid')
 
 # Importing data
 df = pd.read_csv('cust_seg.csv')
-df.drop('Unnamed: 0', axis=1, inplace=True)
 df.set_index('Customer Id', inplace=True)
 
 # Displaying the first few rows of the dataframe
@@ -41,7 +40,7 @@ sb.countplot(df['Defaulted'], palette=['coral', 'deepskyblue'], edgecolor='darkg
 plt.title('Credit Card Default Cases (1) and Non-Default Cases (0)', fontsize=18)
 plt.xlabel('Default Value', fontsize=16)
 plt.ylabel('Number of People', fontsize=16)
-plt.xticks(fontsize=14)
+plt.xticks([0, 1], ['Non-Defaulted', 'Defaulted'], fontsize=14)
 plt.yticks(fontsize=14)
 
 plt.savefig('default_cases.png')
@@ -59,7 +58,7 @@ plt.savefig('age_income.png')
 plt.show()
 
 # Years Employed vs Income
-area = df['DebtIncomeRatio'] ** 2
+area = df['DebtIncomeRatio'] ** 2 * 1000  # Scaling the size for better visualization
 
 sb.scatterplot(x='Years Employed', y='Income', data=df, s=area, alpha=0.6, edgecolor='white', hue='Defaulted', palette='spring')
 plt.title('Years Employed vs. Income', fontsize=18)
@@ -70,6 +69,29 @@ plt.yticks(fontsize=14)
 plt.legend(loc='upper left', fontsize=14)
 
 plt.savefig('years_income.png')
+plt.show()
+
+# Education vs Income
+sb.boxplot(x='Edu', y='Income', data=df, palette='spring')
+plt.title('Education Level vs. Income', fontsize=18)
+plt.xlabel('Education Level', fontsize=16)
+plt.ylabel('Income', fontsize=16)
+plt.xticks(fontsize=14)
+plt.yticks(fontsize=14)
+
+plt.savefig('edu_income.png')
+plt.show()
+
+# Age vs DebtIncomeRatio
+sb.scatterplot(x='Age', y='DebtIncomeRatio', data=df, hue='Defaulted', palette='coolwarm', s=150, alpha=0.6, edgecolor='b')
+plt.title('Age vs. Debt to Income Ratio', fontsize=18)
+plt.xlabel('Age', fontsize=16)
+plt.ylabel('Debt to Income Ratio', fontsize=16)
+plt.xticks(fontsize=14)
+plt.yticks(fontsize=14)
+plt.legend(loc='upper right', fontsize=14)
+
+plt.savefig('age_debt_income_ratio.png')
 plt.show()
 
 # Data Processing
@@ -119,4 +141,9 @@ ax.set_ylabel('Age', fontsize=16)
 ax.set_zlabel('Income', fontsize=16)
 
 plt.savefig('3d_plot.png')
+plt.show()
+
+# Pairplot for all variables with hue as Cluster
+sb.pairplot(df, hue='Cluster', palette='spring', markers=["o", "s", "D"])
+plt.savefig('pairplot.png')
 plt.show()
